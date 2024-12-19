@@ -1,3 +1,5 @@
+const dataUrl = "https://kurokuro12.github.io/Quiz/quiz-data.json";
+
 [
   {
     "category": "2024年6月 第Ⅰ部",
