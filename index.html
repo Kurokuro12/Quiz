@@ -1,45 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <link rel="icon" href="data:," type="image/x-icon">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>簿記1級</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f9f9f9;
-    }
-    .container, #categoryArea, #quizArea, #resultArea {
-      display: none;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .option-button {
-      display: block;
-      margin: 10px 0;
-      padding: 10px;
-      font-size: 16px;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .option-button:hover {
-      background-color: #45a049;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+  <title>簿記1級クイズ</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container" id="startScreen">
@@ -55,7 +20,7 @@
   <div class="container" id="quizArea">
     <h2 id="questionText"></h2>
     <div id="answers"></div>
-    <input type="text" id="writtenAnswer" class="hidden">
+    <input type="text" id="writtenAnswer" class="hidden" placeholder="記述式の回答を入力">
     <button id="submitAnswerButton" class="option-button hidden">回答する</button>
     <button id="skipButton" class="option-button">スキップ</button>
     <button id="giveUpButton" class="option-button" style="background-color: red;">諦める</button>
@@ -68,7 +33,7 @@
   </div>
 
   <script>
-    const dataUrl = "https://kurokuro12.github.io/Quiz/quiz-data.json";
+    const dataUrl = "./quiz-data.json";
 
     let questions = [];
     let currentQuestionIndex = 0;
