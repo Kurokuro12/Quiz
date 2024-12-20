@@ -1,5 +1,7 @@
 
 [
+  const dataUrl = "./quiz-data.json"; // 修正済み: 相対パス
+
   {
     "category": "2024年6月 第Ⅰ部",
     "question": "貸借対照表の原則に関する問題。次のうち正しいものはどれですか？",
