@@ -1,13 +1,167 @@
-<div id="categoryArea" style="display: none;">
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>簿記1級クイズゲーム</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    .container, #categoryArea, #quizArea, #resultArea {
+      display: none;
+    }
+    .option-button {
+      display: inline-block;
+      margin: 5px 0;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .option-button:hover {
+      background-color: #45a049;
+    }
+    #questionText {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="categoryArea">
+    <h2>カテゴリを選択してください</h2>
     <div id="categories"></div>
-</div>
-<div id="quizArea" style="display: none;">
+  </div>
+  <div id="quizArea">
     <div id="questionText"></div>
     <div id="answers"></div>
     <input type="text" id="writtenAnswer" style="display: none;" />
     <button id="submitAnswerButton" style="display: none;">回答する</button>
-</div>
-<div id="resultArea" style="display: none;">
+  </div>
+  <div id="resultArea">
+    <h2>結果</h2>
     <div id="result"></div>
     <button id="restartButton">再挑戦</button>
-</div>
+  </div>
+  <script>
+    // 問題データ
+    const questions = [
+      {
+        category: "2024年6月 第Ⅰ部",
+        question: "貸借対照表の原則に関する問題。次のうち正しいものはどれですか？",
+        options: [
+          "収益性の原則を重視する",
+          "網羅性の原則を重視する",
+          "正確性の原則を優先する",
+          "重要性の原則を考慮しない"
+        ],
+        answer: 1,
+        explanation: "貸借対照表では網羅性の原則が重要です。すべての資産と負債を網羅的に記載する必要があります。",
+      },
+      {
+        category: "2024年6月 第Ⅱ部",
+        question: "商品売買における会計処理について、次の計算問題を解答してください。売上高が1,000万円で、売上原価率が40%の場合の売上総利益は？",
+        options: null,
+        answer: "600",
+        explanation: "売上総利益は、売上高から売上原価を引いた金額です。売上原価は売上高の40%なので、600万円が正解です。",
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let filteredQuestions = [];
+    let playerAnswers = [];
+
+    function showCategories() {
+      const categories = [...new Set(questions.map(q => q.category))];
+      const categoriesDiv = document.getElementById("categories");
+      categoriesDiv.innerHTML = "";
+      categories.forEach(category => {
+        const button = document.createElement("button");
+        button.textContent = category;
+        button.classList.add("option-button");
+        button.addEventListener("click", () => selectCategory(category));
+        categoriesDiv.appendChild(button);
+      });
+      document.getElementById("categoryArea").style.display = "block";
+    }
+
+    function selectCategory(category) {
+      filteredQuestions = questions.filter(q => q.category === category);
+      currentQuestionIndex = 0;
+      playerAnswers = [];
+      document.getElementById("categoryArea").style.display = "none";
+      document.getElementById("quizArea").style.display = "block";
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (currentQuestionIndex >= filteredQuestions.length) {
+        showResult();
+        return;
+      }
+
+      const question = filteredQuestions[currentQuestionIndex];
+      document.getElementById("questionText").textContent = question.question;
+      const answers = document.getElementById("answers");
+      const writtenAnswer = document.getElementById("writtenAnswer");
+      const submitAnswerButton = document.getElementById("submitAnswerButton");
+
+      answers.innerHTML = "";
+      writtenAnswer.style.display = "none";
+      submitAnswerButton.style.display = "none";
+
+      if (question.options) {
+        question.options.forEach((option, index) => {
+          const button = document.createElement("button");
+          button.textContent = option;
+          button.classList.add("option-button");
+          button.addEventListener("click", () => handleAnswer(index));
+          answers.appendChild(button);
+        });
+      } else {
+        writtenAnswer.style.display = "block";
+        submitAnswerButton.style.display = "block";
+        submitAnswerButton.onclick = () => handleAnswer(writtenAnswer.value.trim());
+      }
+    }
+
+    function handleAnswer(selectedAnswer) {
+      const question = filteredQuestions[currentQuestionIndex];
+      const isCorrect = question.options
+        ? selectedAnswer === question.answer
+        : selectedAnswer.toString() === question.answer.toString();
+      playerAnswers.push({
+        question: question.question,
+        selected: question.options ? question.options[selectedAnswer] : selectedAnswer,
+        correct: question.options ? question.options[question.answer] : question.answer,
+        explanation: question.explanation,
+        isCorrect
+      });
+      currentQuestionIndex++;
+      showQuestion();
+    }
+
+    function showResult() {
+      document.getElementById("quizArea").style.display = "none";
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = playerAnswers.map((answer, index) => `
+        <div>
+          <h3>問題 ${index + 1}</h3>
+          <p>あなたの回答: ${answer.selected || "未回答"}</p>
+          <p>正解: ${answer.correct}</p>
+          <p>${answer.isCorrect ? "正解！" : "不正解"}</p>
+          <p>解説: ${answer.explanation}</p>
+        </div>
+      `).join("");
+      document.getElementById("resultArea").style.display = "block";
+    }
+
+    document.addEventListener("DOMContentLoaded", showCategories);
+  </script>
+</body>
+</html>
