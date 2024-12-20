@@ -1,107 +1,107 @@
-index.html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>簿記1級クイズ</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f9f9f9;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .option-button {
-      display: block;
-      margin: 10px 0;
-      padding: 10px;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .option-button:hover {
-      background-color: #45a049;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div id="startScreen">
-      <h1>簿記1級クイズ</h1>
-      <button id="startButton" class="option-button">クイズを開始する</button>
-    </div>
-    <div id="quizScreen" class="hidden">
-      <h2 id="questionText"></h2>
-      <div id="answers"></div>
-      <input type="text" id="writtenAnswer" class="hidden">
-      <button id="submitAnswerButton" class="option-button hidden">回答する</button>
-    </div>
-    <div id="resultScreen" class="hidden">
-      <h2>結果発表</h2>
-      <div id="result"></div>
-      <button id="restartButton" class="option-button">最初からやり直す</button>
-    </div>
+  <div class="container" id="startScreen">
+    <h1>簿記1級クイズ</h1>
+    <button id="startButton" class="option-button">クイズを開始する</button>
+  </div>
+
+  <div class="container" id="categoryArea">
+    <h2>カテゴリを選択してください</h2>
+    <div id="categories"></div>
+  </div>
+
+  <div class="container" id="quizArea">
+    <h2 id="questionText" style="color: navy;"></h2>
+    <div id="answers"></div>
+    <input type="text" id="writtenAnswer" class="hidden" placeholder="記述式の回答を入力してください">
+    <button id="submitAnswerButton" class="option-button hidden">回答する</button>
+    <button id="skipButton" class="option-button">スキップ</button>
+    <button id="giveUpButton" class="option-button" style="background-color: red;">諦める</button>
+  </div>
+
+  <div class="container" id="resultArea">
+    <h2 style="color: green;">結果発表</h2>
+    <div id="result"></div>
+    <button id="restartButton" class="option-button">最初からやり直す</button>
   </div>
 
   <script>
-    const dataUrl = "https://kurokuro12.github.io/Quiz/quiz-data.json";
+    const dataUrl = "./quiz-data.json";
 
     let questions = [];
     let currentQuestionIndex = 0;
     let playerAnswers = [];
+    let skippedQuestions = [];
 
     async function fetchData() {
       try {
         const response = await fetch(dataUrl);
-        if (!response.ok) {
-          throw new Error("データの取得に失敗しました。");
-        }
+        if (!response.ok) throw new Error("データの取得に失敗しました。");
         questions = await response.json();
+        showCategories();
       } catch (error) {
-        console.error(error);
         alert("問題データを読み込めませんでした。");
+        console.error(error);
       }
     }
 
+    function showCategories() {
+      const categories = [...new Set(questions.map(q => q.category))];
+      const categoriesDiv = document.getElementById("categories");
+      categoriesDiv.innerHTML = "";
+      categories.forEach(category => {
+        const button = document.createElement("button");
+        button.textContent = category;
+        button.classList.add("option-button");
+        button.style.marginBottom = "10px"; // ボタンの間隔を調整
+        button.onclick = () => selectCategory(category);
+        categoriesDiv.appendChild(button);
+      });
+      document.getElementById("startScreen").style.display = "none";
+      document.getElementById("categoryArea").style.display = "block";
+    }
+
+    function selectCategory(category) {
+      skippedQuestions = [];
+      playerAnswers = [];
+      currentQuestionIndex = 0;
+      questions = questions.filter(q => q.category === category);
+      document.getElementById("categoryArea").style.display = "none";
+      document.getElementById("quizArea").style.display = "block";
+      showQuestion();
+    }
+
     function showQuestion() {
-      const quizScreen = document.getElementById("quizScreen");
-      const startScreen = document.getElementById("startScreen");
-      const resultScreen = document.getElementById("resultScreen");
+      if (currentQuestionIndex >= questions.length) {
+        if (skippedQuestions.length > 0) {
+          questions = skippedQuestions;
+          skippedQuestions = [];
+          currentQuestionIndex = 0;
+        } else {
+          showResult();
+          return;
+        }
+      }
+
+      const question = questions[currentQuestionIndex];
       const questionText = document.getElementById("questionText");
       const answers = document.getElementById("answers");
       const writtenAnswer = document.getElementById("writtenAnswer");
       const submitAnswerButton = document.getElementById("submitAnswerButton");
 
-      startScreen.classList.add("hidden");
-      resultScreen.classList.add("hidden");
-      quizScreen.classList.remove("hidden");
-
-      if (currentQuestionIndex >= questions.length) {
-        showResult();
-        return;
-      }
-
-      const question = questions[currentQuestionIndex];
       questionText.textContent = question.question;
+      answers.innerHTML = "";
+      writtenAnswer.style.display = "none";
+      submitAnswerButton.style.display = "none";
 
       if (question.options) {
-        // 選択式問題
-        answers.innerHTML = "";
-        writtenAnswer.classList.add("hidden");
-        submitAnswerButton.classList.add("hidden");
         question.options.forEach((option, index) => {
           const button = document.createElement("button");
           button.textContent = option;
@@ -110,17 +110,15 @@ index.html
           answers.appendChild(button);
         });
       } else {
-        // 記述式問題
-        answers.innerHTML = "";
-        writtenAnswer.classList.remove("hidden");
-        submitAnswerButton.classList.remove("hidden");
+        writtenAnswer.style.display = "block";
+        submitAnswerButton.style.display = "block";
         submitAnswerButton.onclick = () => handleAnswer(writtenAnswer.value.trim());
       }
     }
 
     function handleAnswer(selectedAnswer) {
       const question = questions[currentQuestionIndex];
-      const correct = question.options
+      const isCorrect = question.options
         ? selectedAnswer === question.answer
         : selectedAnswer.toString() === question.answer.toString();
 
@@ -129,46 +127,58 @@ index.html
         selected: question.options ? question.options[selectedAnswer] : selectedAnswer,
         correct: question.options ? question.options[question.answer] : question.answer,
         explanation: question.explanation,
-        isCorrect: correct,
+        isCorrect,
       });
 
       currentQuestionIndex++;
       showQuestion();
     }
 
-    function showResult() {
-      const quizScreen = document.getElementById("quizScreen");
-      const resultScreen = document.getElementById("resultScreen");
-      const resultDiv = document.getElementById("result");
-
-      quizScreen.classList.add("hidden");
-      resultScreen.classList.remove("hidden");
-
-      resultDiv.innerHTML = playerAnswers
-        .map((answer, index) => `
-          <div>
-            <h3>問題 ${index + 1}</h3>
-            <p><strong>問題:</strong> ${answer.question}</p>
-            <p><strong>あなたの回答:</strong> ${answer.selected || "未回答"}</p>
-            <p><strong>正解:</strong> ${answer.correct}</p>
-            <p><strong>解説:</strong> ${answer.explanation}</p>
-            <p style="color: ${answer.isCorrect ? "green" : "red"};">
-              ${answer.isCorrect ? "正解！" : "不正解！"}
-            </p>
-          </div>
-        `)
-        .join("");
+    function skipQuestion() {
+      skippedQuestions.push(questions[currentQuestionIndex]);
+      currentQuestionIndex++;
+      showQuestion();
     }
 
-    document.getElementById("startButton").onclick = async () => {
-      await fetchData();
-      showQuestion();
-    };
+    function giveUp() {
+      for (let i = currentQuestionIndex; i < questions.length; i++) {
+        const question = questions[i];
+        playerAnswers.push({
+          question: question.question,
+          selected: "未回答",
+          correct: question.options ? question.options[question.answer] : question.answer,
+          explanation: question.explanation,
+          isCorrect: false,
+        });
+      }
+      showResult();
+    }
 
+    function showResult() {
+      document.getElementById("quizArea").style.display = "none";
+      const resultScreen = document.getElementById("resultArea");
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = playerAnswers
+        .map(
+          (answer, index) => `
+          <div>
+            <h3 style="color: navy;">問題 ${index + 1}</h3>
+            <p style="color: darkblue;"><strong>問題:</strong> ${answer.question}</p>
+            <p style="color: brown;"><strong>あなたの回答:</strong> ${answer.selected || "未回答"}</p>
+            <p style="color: green;"><strong>正解:</strong> ${answer.correct}</p>
+            <p style="color: gray;"><strong>解説:</strong> ${answer.explanation}</p>
+          </div>
+        `
+        )
+        .join("");
+      resultScreen.style.display = "block";
+    }
+
+    document.getElementById("startButton").onclick = fetchData;
+    document.getElementById("skipButton").onclick = skipQuestion;
+    document.getElementById("giveUpButton").onclick = giveUp;
     document.getElementById("restartButton").onclick = () => {
-      currentQuestionIndex = 0;
-      playerAnswers = [];
-      showQuestion();
+      location.reload();
     };
   </script>
 </body>
