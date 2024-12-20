@@ -1,4 +1,3 @@
-const dataUrl = "./quiz-data.json"; // 修正済み: 相対パス
 
 [
   {
