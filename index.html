@@ -139,6 +139,7 @@
     }
 
     function skipQuestion() {
+      // 現在の問題をスキップリストに追加
       skippedQuestions.push(filteredQuestions[currentQuestionIndex]);
       currentQuestionIndex++;
       showQuestion();
