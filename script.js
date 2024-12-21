@@ -1,8 +1,4 @@
 const dataUrl = "./quiz-data.json";
-fetch(dataUrl)
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error("エラー:", error));
 
 let questions = [];
 let filteredQuestions = [];
@@ -144,13 +140,12 @@ function giveUp() {
 }
 
 function showResult() {
-  document.getElementById("quizScreen").classList.add("hidden"); // クイズ画面を非表示
-  const resultScreen = document.getElementById("resultScreen"); // リザルト画面の要素取得
-  const resultDiv = document.getElementById("result"); // リザルト表示エリア
+  document.getElementById("quizScreen").classList.add("hidden");
+  const resultScreen = document.getElementById("resultScreen");
+  const resultDiv = document.getElementById("result");
 
-  resultScreen.classList.remove("hidden"); // リザルト画面を表示
+  resultScreen.classList.remove("hidden");
 
-  // リザルトを生成して表示
   resultDiv.innerHTML = playerAnswers
     .map((answer, index) => `
       <div>
@@ -159,29 +154,14 @@ function showResult() {
         <p><strong style="color: brown;">あなたの回答:</strong> ${answer.selected || "未回答"}</p>
         <p><strong style="color: green;">正解:</strong> ${answer.correct}</p>
         <p><strong style="color: gray;">解説:</strong> ${answer.explanation}</p>
-        ${
-          answer.link
-            ? `<p><a href="${answer.link}" target="_blank" style="color: blue;">参考リンク</a></p>`
-            : ""
-        }
-        ${
-          answer.youtube
-            ? `<p><a href="${answer.youtube}" target="_blank" style="color: red;">YouTube解説動画</a></p>`
-            : ""
-        }
-        <p style="color: ${answer.isCorrect ? "green" : "red"};">
-          ${answer.isCorrect ? "正解！" : "不正解！"}
-        </p>
       </div>
     `)
-    .join(""); // リザルトを一つのHTML文字列にまとめる
+    .join("");
 }
 
-// 再挑戦ボタンの動作を定義
+document.getElementById("startButton").onclick = fetchData;
 document.getElementById("restartButton").onclick = () => {
-  currentQuestionIndex = 0; // 質問インデックスをリセット
-  playerAnswers = []; // 回答データをリセット
-  document.getElementById("resultScreen").classList.add("hidden"); // リザルト画面を非表示
-  document.getElementById("startScreen").classList.remove("hidden"); // スタート画面を表示
+  document.getElementById("resultScreen").classList.add("hidden");
+  document.getElementById("startScreen").classList.remove("hidden");
 };
-
+document.getElementById("giveUpButton").onclick = giveUp;
