@@ -142,7 +142,12 @@
       // 現在の問題をスキップリストに追加
       skippedQuestions.push(filteredQuestions[currentQuestionIndex]);
       currentQuestionIndex++;
-      showQuestion();
+      if (currentQuestionIndex < filteredQuestions.length) {
+        showQuestion();
+      } else {
+        // すべてスキップされた場合、次のロジックへ
+        showResult();
+      }
     }
 
     function giveUp() {
