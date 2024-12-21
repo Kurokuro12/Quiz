@@ -10,7 +10,7 @@ const questions = [
     ],
     "answer": 1,
     "explanation": "貸借対照表では網羅性の原則が重要です。すべての資産と負債を網羅的に記載する必要があります。",
-    "link": "https://example.com/more-info",
+    "link": "https://qiita.com/otohusan/items/39160086ceec63c5b04a",
     "youtube": "https://www.youtube.com/watch?v=OZEtzcyUJpM"
   }
 ];
