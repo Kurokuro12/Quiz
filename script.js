@@ -1,4 +1,8 @@
 const dataUrl = "./quiz-data.json";
+fetch(dataUrl)
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error("エラー:", error));
 
 let questions = [];
 let filteredQuestions = [];
