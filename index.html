@@ -39,6 +39,7 @@
     let filteredQuestions = [];
     let currentQuestionIndex = 0;
     let playerAnswers = [];
+    let skippedQuestions = [];
 
     async function fetchData() {
       try {
@@ -71,6 +72,7 @@
     function selectCategory(category) {
       filteredQuestions = questions.filter(q => q.category === category);
       currentQuestionIndex = 0;
+      skippedQuestions = [];
       playerAnswers = [];
       document.getElementById("categoryScreen").classList.add("hidden");
       document.getElementById("quizScreen").classList.remove("hidden");
@@ -79,8 +81,14 @@
 
     function showQuestion() {
       if (currentQuestionIndex >= filteredQuestions.length) {
-        showResult();
-        return;
+        if (skippedQuestions.length > 0) {
+          filteredQuestions = skippedQuestions;
+          skippedQuestions = [];
+          currentQuestionIndex = 0;
+        } else {
+          showResult();
+          return;
+        }
       }
 
       const question = filteredQuestions[currentQuestionIndex];
@@ -130,12 +138,31 @@
       showQuestion();
     }
 
+    function skipQuestion() {
+      skippedQuestions.push(filteredQuestions[currentQuestionIndex]);
+      currentQuestionIndex++;
+      showQuestion();
+    }
+
+    function giveUp() {
+      for (let i = currentQuestionIndex; i < filteredQuestions.length; i++) {
+        const question = filteredQuestions[i];
+        playerAnswers.push({
+          question: question.question,
+          selected: "未回答",
+          correct: question.options ? question.options[question.answer] : question.answer,
+          explanation: question.explanation,
+          isCorrect: false,
+        });
+      }
+      showResult();
+    }
+
     function showResult() {
-      const quizScreen = document.getElementById("quizScreen");
+      document.getElementById("quizScreen").classList.add("hidden");
       const resultScreen = document.getElementById("resultScreen");
       const resultDiv = document.getElementById("result");
 
-      quizScreen.classList.add("hidden");
       resultScreen.classList.remove("hidden");
 
       resultDiv.innerHTML = playerAnswers
@@ -159,6 +186,8 @@
       document.getElementById("resultScreen").classList.add("hidden");
       document.getElementById("startScreen").classList.remove("hidden");
     };
+    document.getElementById("skipButton").onclick = skipQuestion;
+    document.getElementById("giveUpButton").onclick = giveUp;
   </script>
 </body>
 </html>
