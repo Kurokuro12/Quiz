@@ -144,12 +144,13 @@ function giveUp() {
 }
 
 function showResult() {
-  document.getElementById("quizScreen").classList.add("hidden");
-  const resultScreen = document.getElementById("resultScreen");
-  const resultDiv = document.getElementById("result");
+  document.getElementById("quizScreen").classList.add("hidden"); // クイズ画面を非表示
+  const resultScreen = document.getElementById("resultScreen"); // リザルト画面の要素取得
+  const resultDiv = document.getElementById("result"); // リザルト表示エリア
 
-  resultScreen.classList.remove("hidden");
+  resultScreen.classList.remove("hidden"); // リザルト画面を表示
 
+  // リザルトを生成して表示
   resultDiv.innerHTML = playerAnswers
     .map((answer, index) => `
       <div>
@@ -173,14 +174,14 @@ function showResult() {
         </p>
       </div>
     `)
-    .join("");
+    .join(""); // リザルトを一つのHTML文字列にまとめる
 }
 
-
-
-document.getElementById("startButton").onclick = fetchData;
+// 再挑戦ボタンの動作を定義
 document.getElementById("restartButton").onclick = () => {
-  document.getElementById("resultScreen").classList.add("hidden");
-  document.getElementById("startScreen").classList.remove("hidden");
+  currentQuestionIndex = 0; // 質問インデックスをリセット
+  playerAnswers = []; // 回答データをリセット
+  document.getElementById("resultScreen").classList.add("hidden"); // リザルト画面を非表示
+  document.getElementById("startScreen").classList.remove("hidden"); // スタート画面を表示
 };
-document.getElementById("giveUpButton").onclick = giveUp;
+
