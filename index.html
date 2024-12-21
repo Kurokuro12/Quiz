@@ -82,6 +82,7 @@
     function showQuestion() {
       if (currentQuestionIndex >= filteredQuestions.length) {
         if (skippedQuestions.length > 0) {
+          // スキップされた問題に切り替える
           filteredQuestions = skippedQuestions;
           skippedQuestions = [];
           currentQuestionIndex = 0;
@@ -139,15 +140,18 @@
     }
 
     function skipQuestion() {
-      // 現在の問題をスキップリストに追加
-      skippedQuestions.push(filteredQuestions[currentQuestionIndex]);
+      // 現在の問題を「未回答」として記録し、スキップリストに追加
+      const question = filteredQuestions[currentQuestionIndex];
+      playerAnswers.push({
+        question: question.question,
+        selected: "未回答",
+        correct: question.options ? question.options[question.answer] : question.answer,
+        explanation: question.explanation,
+        isCorrect: false,
+      });
+      skippedQuestions.push(question);
       currentQuestionIndex++;
-      if (currentQuestionIndex < filteredQuestions.length) {
-        showQuestion();
-      } else {
-        // すべてスキップされた場合、次のロジックへ
-        showResult();
-      }
+      showQuestion();
     }
 
     function giveUp() {
