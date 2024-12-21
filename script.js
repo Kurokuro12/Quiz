@@ -148,7 +148,7 @@ function showResult() {
 
   resultDiv.innerHTML = playerAnswers
     .map((answer, index) => `
-      <div>
+      <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 15px;">
         <h3>問題 ${index + 1}</h3>
         <p><strong style="color: navy;">問題:</strong> ${answer.question}</p>
         <p><strong style="color: brown;">あなたの回答:</strong> ${answer.selected || "未回答"}</p>
@@ -156,12 +156,12 @@ function showResult() {
         <p><strong style="color: gray;">解説:</strong> ${answer.explanation}</p>
         ${
           answer.link
-            ? `<p><a href="${answer.link}" target="_blank" style="color: blue;">参考リンク</a></p>`
+            ? `<p><strong style="color: blue;">参考リンク:</strong> <a href="${answer.link}" target="_blank" style="color: blue;">${answer.link}</a></p>`
             : ""
         }
         ${
           answer.youtube
-            ? `<p><a href="${answer.youtube}" target="_blank" style="color: red;">YouTube解説動画</a></p>`
+            ? `<p><strong style="color: red;">YouTube解説動画:</strong> <a href="${answer.youtube}" target="_blank" style="color: red;">${answer.youtube}</a></p>`
             : ""
         }
         <p style="color: ${answer.isCorrect ? "green" : "red"};">
