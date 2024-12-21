@@ -12,14 +12,5 @@
     "explanation": "貸借対照表では網羅性の原則が重要です。すべての資産と負債を網羅的に記載する必要があります。",
     "link": "https://example.com/more-info",
     "youtube": "https://www.youtube.com/watch?v=OZEtzcyUJpM"
-  },
-  {
-    "category": "2024年6月 第Ⅱ部",
-    "question": "売上高が1,200万円、売上原価率が50%の場合の売上総利益はいくらですか？",
-    "options": null,
-    "answer": "600",
-    "explanation": "売上総利益は、売上高から売上原価を引いた金額です。この場合、売上原価は600万円（1,200万円×50%）で、売上総利益は600万円です。",
-    "link": "https://example.com/calculate-profit",
-    "youtube": null
   }
 ]
