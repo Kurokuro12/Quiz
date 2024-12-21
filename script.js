@@ -158,12 +158,12 @@ function showResult() {
         ${
           answer.link
             ? `<p><a href="${answer.link}" target="_blank" style="color: blue;">参考リンク</a></p>`
-            : ""
+            : "<p style='color: gray;'>参考リンクはありません</p>"
         }
         ${
           answer.youtube
             ? `<p><a href="${answer.youtube}" target="_blank" style="color: red;">YouTube解説動画</a></p>`
-            : ""
+            : "<p style='color: gray;'>YouTube解説動画はありません</p>"
         }
         <p style="color: ${answer.isCorrect ? "green" : "red"};">
           ${answer.isCorrect ? "正解！" : "不正解！"}
@@ -172,6 +172,7 @@ function showResult() {
     `)
     .join("");
 }
+
 
 
 
