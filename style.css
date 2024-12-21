@@ -1,28 +1,28 @@
 body {
   font-family: Arial, sans-serif;
-  margin: 20px;
+  margin: 0;
+  padding: 0;
   background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 .container {
   max-width: 800px;
+  width: 100%;
   margin: auto;
   background: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  display: none;
-}
-
-.container.visible {
-  display: block;
 }
 
 .option-button {
   display: block;
   margin: 10px 0;
   padding: 10px;
-  font-size: 16px;
   background-color: #4caf50;
   color: white;
   border: none;
@@ -32,4 +32,12 @@ body {
 
 .option-button:hover {
   background-color: #45a049;
+}
+
+.hidden {
+  display: none;
+}
+
+#categories button {
+  margin: 5px 0; /* カテゴリ間の間隔 */
 }
