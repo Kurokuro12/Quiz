@@ -1,4 +1,4 @@
-const dataUrl = "quiz-data.json";
+const dataUrl = "./quiz-data.json";
 
 let questions = [];
 let filteredQuestions = [];
@@ -48,7 +48,7 @@ function showQuestionCountSelection() {
 
   for (let i = 1; i <= maxQuestions; i++) {
     const button = document.createElement("button");
-    button.textContent = "${i}問";
+    button.textContent = `${i}問`;
     button.classList.add("option-button");
     button.onclick = () => selectQuestionCount(i);
     questionCountDiv.appendChild(button);
@@ -139,7 +139,6 @@ function giveUp() {
   showResult();
 }
 
-console.log("Player Answers: ", playerAnswers);
 function showResult() {
   document.getElementById("quizScreen").classList.add("hidden");
   const resultScreen = document.getElementById("resultScreen");
@@ -148,7 +147,7 @@ function showResult() {
   resultScreen.classList.remove("hidden");
 
   resultDiv.innerHTML = playerAnswers
-    .map((answer, index) => 
+    .map((answer, index) => `
       <div>
         <h3>問題 ${index + 1}</h3>
         <p><strong style="color: navy;">問題:</strong> ${answer.question}</p>
@@ -157,32 +156,21 @@ function showResult() {
         <p><strong style="color: gray;">解説:</strong> ${answer.explanation}</p>
         ${
           answer.link
-            ? <p><a href="${answer.link}" target="_blank" style="color: blue;">参考リンク</a></p>
+            ? `<p><a href="${answer.link}" target="_blank" style="color: blue;">参考リンク</a></p>`
             : "<p style='color: gray;'>参考リンクはありません</p>"
         }
         ${
           answer.youtube && answer.youtube.startsWith("https")
-            ? <p><a href="${answer.youtube}" target="_blank" style="color: red;">YouTube解説動画</a></p>
+            ? `<p><a href="${answer.youtube}" target="_blank" style="color: red;">YouTube解説動画</a></p>`
             : "<p style='color: gray;'>YouTube解説動画はありません</p>"
         }
         <p style="color: ${answer.isCorrect ? "green" : "red"};">
           ${answer.isCorrect ? "正解！" : "不正解！"}
         </p>
       </div>
-    )
+    `)
     .join("");
 }
-
-
-
-fetch(dataUrl)
-  .then(response => response.json())
-  .then(data => {
-    console.log(data); // デバッグ用
-    questions = data;
-    showCategories();
-  })
-  .catch(error => console.error("エラー:", error));
 
 document.getElementById("startButton").onclick = fetchData;
 document.getElementById("restartButton").onclick = () => {
