@@ -1,4 +1,4 @@
-const dataUrl = "./quiz-data.json";
+const dataUrl = "quiz-data.json";
 
 let questions = [];
 let filteredQuestions = [];
