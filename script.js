@@ -48,7 +48,7 @@ function showQuestionCountSelection() {
 
   for (let i = 1; i <= maxQuestions; i++) {
     const button = document.createElement("button");
-    button.textContent = {i}問;
+    button.textContent = ${i}問;
     button.classList.add("option-button");
     button.onclick = () => selectQuestionCount(i);
     questionCountDiv.appendChild(button);
