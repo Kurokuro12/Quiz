@@ -17,6 +17,11 @@
     <div id="categories"></div>
   </div>
 
+  <div class="container hidden" id="questionCountScreen">
+    <h2>出題数を選択してください</h2>
+    <div id="questionCount"></div>
+  </div>
+
   <div class="container hidden" id="quizScreen">
     <h2 id="questionText"></h2>
     <div id="answers"></div>
@@ -38,6 +43,7 @@
     let filteredQuestions = [];
     let currentQuestionIndex = 0;
     let playerAnswers = [];
+    let selectedQuestionCount = 0;
 
     async function fetchData() {
       try {
@@ -71,13 +77,36 @@
       filteredQuestions = questions.filter(q => q.category === category);
       currentQuestionIndex = 0;
       playerAnswers = [];
+      showQuestionCountSelection();
+    }
+
+    function showQuestionCountSelection() {
+      const questionCountDiv = document.getElementById("questionCount");
+      questionCountDiv.innerHTML = "";
+      const maxQuestions = filteredQuestions.length;
+
+      for (let i = 1; i <= maxQuestions; i++) {
+        const button = document.createElement("button");
+        button.textContent = `${i}問`;
+        button.classList.add("option-button");
+        button.onclick = () => selectQuestionCount(i);
+        questionCountDiv.appendChild(button);
+      }
+
       document.getElementById("categoryScreen").classList.add("hidden");
+      document.getElementById("questionCountScreen").classList.remove("hidden");
+    }
+
+    function selectQuestionCount(count) {
+      selectedQuestionCount = count;
+      filteredQuestions = filteredQuestions.slice(0, count);
+      document.getElementById("questionCountScreen").classList.add("hidden");
       document.getElementById("quizScreen").classList.remove("hidden");
       showQuestion();
     }
 
     function showQuestion() {
-      if (currentQuestionIndex >= filteredQuestions.length) {
+      if (currentQuestionIndex >= selectedQuestionCount) {
         showResult();
         return;
       }
