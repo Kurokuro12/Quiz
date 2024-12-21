@@ -161,7 +161,7 @@ function showResult() {
             : "<p style='color: gray;'>参考リンクはありません</p>"
         }
         ${
-          answer.youtube
+          answer.youtube && answer.youtube.startsWith("https")
             ? `<p><a href="${answer.youtube}" target="_blank" style="color: red;">YouTube解説動画</a></p>`
             : "<p style='color: gray;'>YouTube解説動画はありません</p>"
         }
