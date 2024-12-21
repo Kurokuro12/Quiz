@@ -63,4 +63,15 @@ h1, h2 {
     font-size: 1.1em; /* スマホでも文字が見やすいように調整 */
     padding: 15px;
   }
+
+  a {
+  text-decoration: underline;
+  color: blue;
+}
+
+a:hover {
+  color: darkblue;
+  text-decoration: none;
+}
+
 }
