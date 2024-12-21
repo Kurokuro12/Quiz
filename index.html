@@ -22,7 +22,6 @@
     <div id="answers"></div>
     <input type="text" id="writtenAnswer" class="hidden" placeholder="記述式の回答を入力してください">
     <button id="submitAnswerButton" class="option-button hidden">回答する</button>
-    <button id="skipButton" class="option-button">スキップ</button>
     <button id="giveUpButton" class="option-button" style="background-color: red;">諦める</button>
   </div>
 
@@ -39,7 +38,6 @@
     let filteredQuestions = [];
     let currentQuestionIndex = 0;
     let playerAnswers = [];
-    let skippedQuestions = [];
 
     async function fetchData() {
       try {
@@ -72,7 +70,6 @@
     function selectCategory(category) {
       filteredQuestions = questions.filter(q => q.category === category);
       currentQuestionIndex = 0;
-      skippedQuestions = [];
       playerAnswers = [];
       document.getElementById("categoryScreen").classList.add("hidden");
       document.getElementById("quizScreen").classList.remove("hidden");
@@ -81,14 +78,8 @@
 
     function showQuestion() {
       if (currentQuestionIndex >= filteredQuestions.length) {
-        if (skippedQuestions.length > 0) {
-          filteredQuestions = [...skippedQuestions];
-          skippedQuestions = [];
-          currentQuestionIndex = 0;
-        } else {
-          showResult();
-          return;
-        }
+        showResult();
+        return;
       }
 
       const question = filteredQuestions[currentQuestionIndex];
@@ -136,30 +127,17 @@
       showQuestion();
     }
 
-    function skipQuestion() {
-      const question = filteredQuestions[currentQuestionIndex];
-      skippedQuestions.push(question);
-      playerAnswers.push({
-        question: question.question,
-        selected: "未回答",
-        correct: question.options ? question.options[question.answer] : question.answer,
-        explanation: question.explanation,
-        isCorrect: false,
-      });
-      currentQuestionIndex++;
-      showQuestion();
-    }
-
     function giveUp() {
-      skippedQuestions.forEach(q => {
+      for (let i = currentQuestionIndex; i < filteredQuestions.length; i++) {
+        const question = filteredQuestions[i];
         playerAnswers.push({
-          question: q.question,
+          question: question.question,
           selected: "未回答",
-          correct: q.options ? q.options[q.answer] : q.answer,
-          explanation: q.explanation,
+          correct: question.options ? question.options[question.answer] : question.answer,
+          explanation: question.explanation,
           isCorrect: false,
         });
-      });
+      }
       showResult();
     }
 
@@ -191,7 +169,6 @@
       document.getElementById("resultScreen").classList.add("hidden");
       document.getElementById("startScreen").classList.remove("hidden");
     };
-    document.getElementById("skipButton").onclick = skipQuestion;
     document.getElementById("giveUpButton").onclick = giveUp;
   </script>
 </body>
