@@ -15,4 +15,4 @@ const questions = [
   }
 ];
 
-showCategories();
+
