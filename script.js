@@ -1,3 +1,23 @@
+const questions = [
+  {
+    "category": "2024年6月 第Ⅰ部",
+    "question": "貸借対照表の原則に関する問題。次のうち正しいものはどれですか？",
+    "options": [
+      "収益性の原則を重視する",
+      "網羅性の原則を重視する",
+      "正確性の原則を優先する",
+      "重要性の原則を考慮しない"
+    ],
+    "answer": 1,
+    "explanation": "貸借対照表では網羅性の原則が重要です。すべての資産と負債を網羅的に記載する必要があります。",
+    "link": "https://example.com/more-info",
+    "youtube": "https://www.youtube.com/watch?v=OZEtzcyUJpM"
+  }
+];
+
+showCategories();
+
+
 const dataUrl = "./quiz-data.json";
 
 let questions = [];
