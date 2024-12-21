@@ -175,7 +175,14 @@ function showResult() {
 
 
 
-
+fetch(dataUrl)
+  .then(response => response.json())
+  .then(data => {
+    console.log(data); // デバッグ用
+    questions = data;
+    showCategories();
+  })
+  .catch(error => console.error("エラー:", error));
 
 document.getElementById("startButton").onclick = fetchData;
 document.getElementById("restartButton").onclick = () => {
