@@ -1,4 +1,3 @@
-/* 全体の基本スタイル */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -10,7 +9,6 @@ body {
   min-height: 100vh;
 }
 
-/* コンテナのスタイル */
 .container {
   max-width: 800px;
   width: 100%;
@@ -21,19 +19,17 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* ヘッダー */
 h1, h2 {
   font-size: 1.8em;
   margin-bottom: 20px;
   text-align: center;
 }
 
-/* ボタンのスタイル */
 .option-button {
   display: block;
-  margin: 15px 0; /* ボタン間の間隔を広げる */
-  padding: 20px; /* ボタン内の余白を増やす */
-  font-size: 1.2em; /* ボタンの文字サイズを大きく */
+  margin: 15px 0;
+  padding: 20px;
+  font-size: 1.2em;
   background-color: #4caf50;
   color: white;
   border: none;
@@ -46,44 +42,10 @@ h1, h2 {
   background-color: #45a049;
 }
 
-/* 非表示要素 */
 .hidden {
   display: none;
 }
 
-/* カテゴリボタンの間隔 */
-#categories button {
-  margin: 10px 0; /* カテゴリ間の間隔を調整 */
-}
-
-/* リザルト画面のリンクスタイル */
-a {
-  text-decoration: underline;
-  color: blue;
-}
-
-a:hover {
-  color: darkblue;
-  text-decoration: none;
-}
-
-/* スマートフォン対応のレスポンシブデザイン */
-@media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
-
-  h1, h2 {
-    font-size: 1.5em;
-  }
-
-  .option-button {
-    font-size: 1.1em; /* スマホでも文字が見やすいように調整 */
-    padding: 15px;
-  }
-}
-
-/* リザルト画面のカードデザイン */
 #resultScreen div {
   background: #f4f4f4;
   margin-bottom: 15px;
@@ -92,7 +54,6 @@ a:hover {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 各種テキストの色指定 */
 #resultScreen h3 {
   color: #333;
 }
