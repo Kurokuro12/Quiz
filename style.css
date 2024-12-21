@@ -19,14 +19,21 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+h1, h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 .option-button {
   display: block;
-  margin: 10px 0;
-  padding: 10px;
+  margin: 15px 0; /* ボタン間の間隔を広げる */
+  padding: 20px; /* ボタン内の余白を増やす */
+  font-size: 1.2em; /* ボタンの文字サイズを大きく */
   background-color: #4caf50;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
@@ -39,5 +46,21 @@ body {
 }
 
 #categories button {
-  margin: 5px 0; /* カテゴリ間の間隔 */
+  margin: 10px 0; /* カテゴリ間の間隔を調整 */
+}
+
+@media (max-width: 768px) {
+  /* スマートフォンサイズ用のスタイル */
+  .container {
+    padding: 15px;
+  }
+
+  h1, h2 {
+    font-size: 1.5em;
+  }
+
+  .option-button {
+    font-size: 1.1em; /* スマホでも文字が見やすいように調整 */
+    padding: 15px;
+  }
 }
