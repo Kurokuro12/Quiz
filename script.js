@@ -139,6 +139,7 @@ function giveUp() {
   showResult();
 }
 
+console.log("Player Answers: ", playerAnswers);
 function showResult() {
   document.getElementById("quizScreen").classList.add("hidden");
   const resultScreen = document.getElementById("resultScreen");
