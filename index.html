@@ -82,7 +82,6 @@
     function showQuestion() {
       if (currentQuestionIndex >= filteredQuestions.length) {
         if (skippedQuestions.length > 0) {
-          // スキップされた問題に切り替える
           filteredQuestions = [...skippedQuestions];
           skippedQuestions = [];
           currentQuestionIndex = 0;
@@ -101,7 +100,6 @@
       questionText.textContent = question.question;
 
       if (question.options) {
-        // 選択式問題
         answers.innerHTML = "";
         writtenAnswer.classList.add("hidden");
         submitAnswerButton.classList.add("hidden");
@@ -113,7 +111,6 @@
           answers.appendChild(button);
         });
       } else {
-        // 記述式問題
         answers.innerHTML = "";
         writtenAnswer.classList.remove("hidden");
         submitAnswerButton.classList.remove("hidden");
@@ -140,11 +137,8 @@
     }
 
     function skipQuestion() {
-      // 現在の問題をスキップリストに追加
       const question = filteredQuestions[currentQuestionIndex];
       skippedQuestions.push(question);
-
-      // スキップした問題を「未回答」として記録
       playerAnswers.push({
         question: question.question,
         selected: "未回答",
@@ -152,23 +146,20 @@
         explanation: question.explanation,
         isCorrect: false,
       });
-
       currentQuestionIndex++;
       showQuestion();
     }
 
     function giveUp() {
-      // 残りの問題をすべて「未回答」としてリザルトに記録
-      for (let i = currentQuestionIndex; i < filteredQuestions.length; i++) {
-        const question = filteredQuestions[i];
+      skippedQuestions.forEach(q => {
         playerAnswers.push({
-          question: question.question,
+          question: q.question,
           selected: "未回答",
-          correct: question.options ? question.options[question.answer] : question.answer,
-          explanation: question.explanation,
+          correct: q.options ? q.options[q.answer] : q.answer,
+          explanation: q.explanation,
           isCorrect: false,
         });
-      }
+      });
       showResult();
     }
 
