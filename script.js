@@ -159,11 +159,7 @@ function showResult() {
             ? `<p><strong style="color: blue;">参考リンク:</strong> <a href="${answer.link}" target="_blank" style="color: blue;">${answer.link}</a></p>`
             : ""
         }
-        ${
-          answer.youtube
-            ? `<p><strong style="color: red;">YouTube解説動画:</strong> <a href="${answer.youtube}" target="_blank" style="color: red;">${answer.youtube}</a></p>`
-            : ""
-        }
+       
         <p style="color: ${answer.isCorrect ? "green" : "red"};">
           ${answer.isCorrect ? "正解！" : "不正解！"}
         </p>
