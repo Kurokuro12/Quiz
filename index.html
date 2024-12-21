@@ -83,7 +83,7 @@
       if (currentQuestionIndex >= filteredQuestions.length) {
         if (skippedQuestions.length > 0) {
           // スキップされた問題に切り替える
-          filteredQuestions = [...skippedQuestions];
+          filteredQuestions = skippedQuestions;
           skippedQuestions = [];
           currentQuestionIndex = 0;
         } else {
@@ -155,6 +155,7 @@
     }
 
     function giveUp() {
+      // 残りの問題をすべて「未回答」としてリザルトに記録
       for (let i = currentQuestionIndex; i < filteredQuestions.length; i++) {
         const question = filteredQuestions[i];
         playerAnswers.push({
