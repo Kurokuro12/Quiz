@@ -121,14 +121,21 @@ function showResults() {
   resultDiv.innerHTML = "";
 
   playerAnswers.forEach((answer, index) => {
+    const isCorrect = answer.correctAnswer === answer.playerAnswer;
     const resultItem = document.createElement("div");
     resultItem.classList.add("result-item");
     resultItem.innerHTML = `
       <h3>Q${index + 1}: ${answer.question}</h3>
-      <p><strong>正解:</strong> ${answer.correctAnswer}</p>
-      <p><strong>あなたの回答:</strong> ${answer.playerAnswer}</p>
-      <p><strong>解説:</strong> ${answer.explanation || "解説はありません。"}</p>
-      <p>${answer.correctAnswer === answer.playerAnswer ? "✅ 正解" : "❌ 不正解"}</p>
+      <p>
+        <strong style="color: navy;">正解:</strong> 
+        <span style="color: green;">${answer.correctAnswer}</span>
+      </p>
+      <p>
+        <strong style="color: brown;">あなたの回答:</strong> 
+        <span style="color: ${isCorrect ? "green" : "red"};">${answer.playerAnswer || "未回答"}</span>
+      </p>
+      <p><strong style="color: gray;">解説:</strong> ${answer.explanation || "解説はありません。"}</p>
+      <p>${isCorrect ? "✅ 正解" : "❌ 不正解"}</p>
     `;
     resultDiv.appendChild(resultItem);
   });
@@ -136,6 +143,7 @@ function showResults() {
   document.getElementById("quizScreen").classList.add("hidden");
   document.getElementById("resultScreen").classList.remove("hidden");
 }
+
 
 // 最初の画面に戻る
 function restartQuiz() {
