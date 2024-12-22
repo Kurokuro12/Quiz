@@ -1,9 +1,9 @@
 /* 全体の基本スタイル */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f3f4f6;
+  background-color: #f9f9f9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,22 +18,21 @@ body {
   background: #fff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* ヘッダー */
 h1, h2 {
-  font-size: 2em;
+  font-size: 1.8em;
   margin-bottom: 20px;
   text-align: center;
-  color: #333;
 }
 
 /* ボタンのスタイル */
 .option-button {
   display: block;
-  margin: 15px auto;
-  padding: 15px 20px;
+  margin: 15px 0;
+  padding: 20px;
   font-size: 1.2em;
   background-color: #4caf50;
   color: white;
@@ -41,28 +40,10 @@ h1, h2 {
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.3s;
 }
 
 .option-button:hover {
   background-color: #45a049;
-}
-
-.give-up-button {
-  background-color: #ff4d4d;
-}
-
-.give-up-button:hover {
-  background-color: #ff3333;
-}
-
-.info-button {
-  background-color: #2196f3;
-  margin-top: 10px;
-}
-
-.info-button:hover {
-  background-color: #1976d2;
 }
 
 /* 非表示要素 */
@@ -70,15 +51,21 @@ h1, h2 {
   display: none;
 }
 
+/* カテゴリボタンの間隔 */
+#categories button {
+  margin: 10px 0;
+}
+
 /* リザルト画面のカードデザイン */
 #resultScreen div {
-  background: #f9f9f9;
+  background: #f4f4f4;
   margin-bottom: 15px;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* 各種テキストの色指定 */
 #resultScreen h3 {
   color: #333;
 }
@@ -90,31 +77,4 @@ h1, h2 {
 
 #resultScreen p strong {
   font-weight: bold;
-}
-
-/* リンクスタイル */
-a {
-  color: #2196f3;
-  text-decoration: underline;
-}
-
-a:hover {
-  color: #1976d2;
-  text-decoration: none;
-}
-
-/* スマートフォン対応 */
-@media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
-
-  h1, h2 {
-    font-size: 1.5em;
-  }
-
-  .option-button {
-    font-size: 1em;
-    padding: 12px 15px;
-  }
 }
