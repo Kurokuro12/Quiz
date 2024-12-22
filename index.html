@@ -3,38 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>簿記1級クイズ</title>
+  <title>簿記1級</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container" id="startScreen">
-    <h1>簿記1級クイズ</h1>
-    <button id="startButton" class="option-button">クイズを開始する</button>
+  <div id="startScreen">
+    <h1>簿記1級問題</h1>
+    <button id="startButton" class="main-button">開始する</button>
+    <button id="infoButton" class="main-button">お知らせとか</button>
   </div>
 
-  <div class="container hidden" id="categoryScreen">
+  <div id="categoryScreen" class="hidden">
     <h2>カテゴリを選択してください</h2>
     <div id="categories"></div>
   </div>
 
-  <div class="container hidden" id="questionCountScreen">
+  <div id="questionCountScreen" class="hidden">
     <h2>出題数を選択してください</h2>
     <div id="questionCount"></div>
   </div>
 
-  <div class="container hidden" id="quizScreen">
+  <div id="quizScreen" class="hidden">
     <h2 id="questionText"></h2>
-    <img id="questionImage" class="hidden" alt="参考資料" style="max-width: 100%; margin-top: 20px;">
+    <img id="questionImage" class="hidden" alt="問題画像">
     <div id="answers"></div>
-    <input type="text" id="writtenAnswer" class="hidden" placeholder="記述式の回答を入力してください">
-    <button id="submitAnswerButton" class="option-button hidden">回答する</button>
-    <button id="giveUpButton" class="option-button" style="background-color: red;">諦める</button>
+    <input type="text" id="writtenAnswer" class="hidden" placeholder="回答を入力">
+    <button id="submitAnswerButton" class="hidden">送信</button>
+    <button id="giveUpButton" class="main-button">リタイア</button>
   </div>
 
-  <div class="container hidden" id="resultScreen">
-    <h2>リザルト</h2>
+  <div id="resultScreen" class="hidden">
+    <h2>結果</h2>
     <div id="result"></div>
-    <button id="restartButton" class="option-button">最初に戻る</button>
+    <button id="restartButton" class="main-button">再挑戦</button>
+  </div>
+
+  <div id="infoScreen" class="hidden">
+    <h2>お知らせ</h2>
+    <p><a href="https://example.com/reference-link" target="_blank">参考リンク</a></p>
+    <p><a href="https://example.com/video-link" target="_blank">解説動画リンク</a></p>
+    <button id="backToStartButton" class="main-button">戻る</button>
   </div>
 
   <script src="script.js"></script>
