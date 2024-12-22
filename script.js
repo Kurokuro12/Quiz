@@ -76,7 +76,7 @@ function showQuestion() {
   answersDiv.innerHTML = "";
 
   if (question.type === "choice") {
-    question.options.forEach((option, index) => {
+    question.options.forEach((option) => {
       const button = document.createElement("button");
       button.textContent = option;
       button.classList.add("option-button");
@@ -155,8 +155,10 @@ function backToStart() {
 }
 
 // イベントリスナー
+document.getElementBy
 document.getElementById("startButton").onclick = fetchData;
 document.getElementById("infoButton").onclick = showInfo;
 document.getElementById("backToStartButton").onclick = backToStart;
 document.getElementById("restartButton").onclick = restartQuiz;
 document.getElementById("giveUpButton").onclick = showResults;
+
