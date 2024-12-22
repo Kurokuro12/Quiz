@@ -99,10 +99,12 @@ function handleAnswer(answer) {
     return;
   }
 
+  const currentQuestion = filteredQuestions[currentQuestionIndex];
   playerAnswers.push({
-    question: filteredQuestions[currentQuestionIndex].question,
-    correctAnswer: filteredQuestions[currentQuestionIndex].correctAnswer,
-    playerAnswer: answer
+    question: currentQuestion.question,
+    correctAnswer: currentQuestion.correctAnswer,
+    playerAnswer: answer,
+    explanation: currentQuestion.explanation
   });
 
   currentQuestionIndex++;
@@ -120,10 +122,12 @@ function showResults() {
 
   playerAnswers.forEach((answer, index) => {
     const resultItem = document.createElement("div");
+    resultItem.classList.add("result-item");
     resultItem.innerHTML = `
       <h3>Q${index + 1}: ${answer.question}</h3>
       <p><strong>正解:</strong> ${answer.correctAnswer}</p>
       <p><strong>あなたの回答:</strong> ${answer.playerAnswer}</p>
+      <p><strong>解説:</strong> ${answer.explanation || "解説はありません。"}</p>
       <p>${answer.correctAnswer === answer.playerAnswer ? "✅ 正解" : "❌ 不正解"}</p>
     `;
     resultDiv.appendChild(resultItem);
