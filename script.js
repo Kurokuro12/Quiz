@@ -10,7 +10,7 @@ async function fetchData() {
     showCategories();
   } catch (error) {
     console.error("データの取得中にエラーが発生しました:", error);
-    alert("問題データの読み込みに失敗しました。データを確認してください。");
+    alert("問題データの読み込みに失敗。データを確認してください。");
   }
 }
 
