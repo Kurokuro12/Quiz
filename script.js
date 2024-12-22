@@ -1,4 +1,4 @@
-const dataUrl = "./quiz-data.json"; // 重複を避けるため、宣言はここで一度だけ行う
+const dataUrl = "./quiz-data.json";
 
 let questions = [];
 let filteredQuestions = [];
@@ -10,9 +10,7 @@ async function fetchData() {
   try {
     const response = await fetch(dataUrl);
     if (!response.ok) throw new Error(`HTTPエラー: ${response.status}`);
-    
-    const data = await response.json();
-    questions = data;
+    questions = await response.json();
     showCategories();
   } catch (error) {
     console.error("データの取得中にエラーが発生しました:", error);
@@ -83,6 +81,7 @@ function showQuestion() {
 
   questionText.textContent = question.question;
 
+  // 画像がある場合
   if (question.image) {
     questionImage.src = question.image;
     questionImage.classList.remove("hidden");
@@ -90,55 +89,40 @@ function showQuestion() {
     questionImage.classList.add("hidden");
   }
 
-  if (question.options) {
+  // 選択肢がある場合
+  if (question.choices) {
     answers.innerHTML = "";
-    writtenAnswer.classList.add("hidden");
-    submitAnswerButton.classList.add("hidden");
-    question.options.forEach((option, index) => {
+    question.choices.forEach((choice, index) => {
       const button = document.createElement("button");
-      button.textContent = option;
+      button.textContent = choice;
       button.classList.add("option-button");
-      button.onclick = () => handleAnswer(index);
+      button.onclick = () => handleAnswer(choice);
       answers.appendChild(button);
     });
+
+    writtenAnswer.classList.add("hidden");
+    submitAnswerButton.classList.add("hidden");
   } else {
-    answers.innerHTML = "";
+    // 記述式の場合
     writtenAnswer.classList.remove("hidden");
     submitAnswerButton.classList.remove("hidden");
     submitAnswerButton.onclick = () => handleAnswer(writtenAnswer.value.trim());
   }
 }
 
+
 function handleAnswer(selectedAnswer) {
   const question = filteredQuestions[currentQuestionIndex];
-  const isCorrect = question.options
-    ? selectedAnswer === question.answer
-    : selectedAnswer.toString() === question.answer.toString();
-
   playerAnswers.push({
     question: question.question,
-    selected: question.options ? question.options[selectedAnswer] : selectedAnswer,
-    correct: question.options ? question.options[question.answer] : question.answer,
+    selected: selectedAnswer,
+    correct: question.answer,
     explanation: question.explanation,
-    isCorrect,
+    isCorrect: selectedAnswer === question.answer,
   });
 
   currentQuestionIndex++;
   showQuestion();
-}
-
-function giveUp() {
-  for (let i = currentQuestionIndex; i < filteredQuestions.length; i++) {
-    const question = filteredQuestions[i];
-    playerAnswers.push({
-      question: question.question,
-      selected: "未回答",
-      correct: question.options ? question.options[question.answer] : question.answer,
-      explanation: question.explanation,
-      isCorrect: false,
-    });
-  }
-  showResult();
 }
 
 function showResult() {
@@ -147,25 +131,14 @@ function showResult() {
   const resultDiv = document.getElementById("result");
 
   resultScreen.classList.remove("hidden");
-
   resultDiv.innerHTML = playerAnswers
     .map((answer, index) => `
       <div>
         <h3>問題 ${index + 1}</h3>
-        <p><strong style="color: navy;">問題:</strong> ${answer.question}</p>
-        <p><strong style="color: brown;">あなたの回答:</strong> ${answer.selected || "未回答"}</p>
-        <p><strong style="color: green;">正解:</strong> ${answer.correct}</p>
-        <p><strong style="color: gray;">解説:</strong> ${answer.explanation}</p>
-        ${
-          answer.link
-            ? `<p><a href="${answer.link}" target="_blank" style="color: blue;">参考リンク</a></p>`
-            : "<p style='color: gray;'>参考リンクはありません</p>"
-        }
-        ${
-          answer.youtube && answer.youtube.startsWith("https")
-            ? `<p><a href="${answer.youtube}" target="_blank" style="color: red;">YouTube解説動画</a></p>`
-            : "<p style='color: gray;'>YouTube解説動画はありません</p>"
-        }
+        <p><strong>問題:</strong> ${answer.question}</p>
+        <p><strong>あなたの回答:</strong> ${answer.selected || "未回答"}</p>
+        <p><strong>正解:</strong> ${answer.correct}</p>
+        <p><strong>解説:</strong> ${answer.explanation}</p>
         <p style="color: ${answer.isCorrect ? "green" : "red"};">
           ${answer.isCorrect ? "正解！" : "不正解！"}
         </p>
@@ -175,8 +148,15 @@ function showResult() {
 }
 
 document.getElementById("startButton").onclick = fetchData;
+document.getElementById("infoButton").onclick = () => {
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("infoScreen").classList.remove("hidden");
+};
+document.getElementById("backToStartButton").onclick = () => {
+  document.getElementById("infoScreen").classList.add("hidden");
+  document.getElementById("startScreen").classList.remove("hidden");
+};
 document.getElementById("restartButton").onclick = () => {
   document.getElementById("resultScreen").classList.add("hidden");
   document.getElementById("startScreen").classList.remove("hidden");
 };
-document.getElementById("giveUpButton").onclick = giveUp;
