@@ -14,7 +14,7 @@ async function fetchData() {
     showCategories();
   } catch (error) {
     console.error(error);
-    alert("問題データを読み込めませんでした。");
+    alert("問題データをみ込めませんでした。");
   }
 }
 
