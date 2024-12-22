@@ -1,21 +1,4 @@
-const dataUrl = "./quiz-data.json";
-
-async function fetchData() {
-  try {
-    const response = await fetch(dataUrl);
-    if (!response.ok) throw new Error(`HTTPエラー: ${response.status}`);
-    
-    const data = await response.json(); // ここでJSONパースエラーが発生する可能性がある
-    questions = data;
-    showCategories();
-  } catch (error) {
-    console.error("データの取得中にエラーが発生しました:", error);
-    alert("問題データの読み込みに失敗。データを確認してください。");
-  }
-}
-
-
-const dataUrl = "./quiz-data.json";
+const dataUrl = "./quiz-data.json"; // 重複を避けるため、宣言はここで一度だけ行う
 
 let questions = [];
 let filteredQuestions = [];
@@ -26,12 +9,14 @@ let selectedQuestionCount = 0;
 async function fetchData() {
   try {
     const response = await fetch(dataUrl);
-    if (!response.ok) throw new Error("データの取得に失敗しました。");
-    questions = await response.json();
+    if (!response.ok) throw new Error(`HTTPエラー: ${response.status}`);
+    
+    const data = await response.json();
+    questions = data;
     showCategories();
   } catch (error) {
-    console.error(error);
-    alert("問題データを読み込めませんでした。");
+    console.error("データの取得中にエラーが発生しました:", error);
+    alert("問題データの読み込みに失敗しました。データを確認してください。");
   }
 }
 
