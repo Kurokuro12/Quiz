@@ -10,7 +10,17 @@
   <div class="container" id="startScreen">
     <h1>簿記1級クイズ</h1>
     <button id="startButton" class="option-button">クイズを開始する</button>
-    <button id="infoButton" class="info-button">お知らせを見る</button>
+    <button id="infoButton" class="option-button">お知らせ</button>
+  </div>
+
+  <div class="container hidden" id="infoScreen">
+    <h2>お知らせ</h2>
+    <p>以下のリンクを参考にしてください:</p>
+    <ul>
+      <li><a href="https://www.kentei.ne.jp/wp/wp-content/uploads/2024/06/167_01.pdf" target="_blank">2024年6月 第Ⅰ部 PDF</a></li>
+      <li><a href="https://www.kentei.ne.jp/wp/wp-content/uploads/2024/06/167_02.pdf" target="_blank">2024年6月 第Ⅱ部 PDF</a></li>
+    </ul>
+    <button id="backToStartButton" class="option-button">戻る</button>
   </div>
 
   <div class="container hidden" id="categoryScreen">
@@ -25,24 +35,16 @@
 
   <div class="container hidden" id="quizScreen">
     <h2 id="questionText"></h2>
-    <img id="questionImage" class="hidden" alt="参考資料" style="max-width: 100%; margin-top: 20px;">
     <div id="answers"></div>
     <input type="text" id="writtenAnswer" class="hidden" placeholder="記述式の回答を入力してください">
     <button id="submitAnswerButton" class="option-button hidden">回答する</button>
-    <button id="giveUpButton" class="option-button give-up-button">諦める</button>
+    <button id="giveUpButton" class="option-button" style="background-color: red;">諦める</button>
   </div>
 
   <div class="container hidden" id="resultScreen">
     <h2>リザルト</h2>
     <div id="result"></div>
     <button id="restartButton" class="option-button">最初に戻る</button>
-  </div>
-
-  <div class="container hidden" id="infoScreen">
-    <h2>お知らせ</h2>
-    <p><strong>参考リンク:</strong> <a href="https://www.example.com" target="_blank">参考ページはこちら</a></p>
-    <p><strong>解説動画:</strong> <a href="https://www.youtube.com" target="_blank">解説動画はこちら</a></p>
-    <button id="backToStartButton" class="option-button">戻る</button>
   </div>
 
   <script src="script.js"></script>
