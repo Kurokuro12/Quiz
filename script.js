@@ -74,19 +74,11 @@ function showQuestion() {
 
   const question = filteredQuestions[currentQuestionIndex];
   const questionText = document.getElementById("questionText");
-  const questionImage = document.getElementById("questionImage");
   const answers = document.getElementById("answers");
   const writtenAnswer = document.getElementById("writtenAnswer");
   const submitAnswerButton = document.getElementById("submitAnswerButton");
 
   questionText.textContent = question.question;
-
-  if (question.image) {
-    questionImage.src = question.image;
-    questionImage.classList.remove("hidden");
-  } else {
-    questionImage.classList.add("hidden");
-  }
 
   if (question.options) {
     answers.innerHTML = "";
@@ -101,7 +93,6 @@ function showQuestion() {
     });
   } else {
     answers.innerHTML = "";
-    writtenAnswer.value = ""; // 入力フィールドをクリア
     writtenAnswer.classList.remove("hidden");
     submitAnswerButton.classList.remove("hidden");
     submitAnswerButton.onclick = () => handleAnswer(writtenAnswer.value.trim());
@@ -116,13 +107,9 @@ function handleAnswer(selectedAnswer) {
 
   playerAnswers.push({
     question: question.question,
-    selected: question.options
-      ? question.options[selectedAnswer] || "未回答" // 選択式
-      : selectedAnswer || "未回答", // 記述式
-    correct: question.options
-      ? question.options[question.answer] // 選択式
-      : question.answer, // 記述式
-    explanation: question.explanation || "解説はありません",
+    selected: question.options ? question.options[selectedAnswer] : selectedAnswer,
+    correct: question.options ? question.options[question.answer] : question.answer,
+    explanation: question.explanation,
     isCorrect,
   });
 
@@ -136,10 +123,8 @@ function giveUp() {
     playerAnswers.push({
       question: question.question,
       selected: "未回答",
-      correct: question.options
-        ? question.options[question.answer] // 選択式
-        : question.answer, // 記述式
-      explanation: question.explanation || "解説はありません",
+      correct: question.options ? question.options[question.answer] : question.answer,
+      explanation: question.explanation,
       isCorrect: false,
     });
   }
@@ -158,9 +143,12 @@ function showResult() {
       <div>
         <h3>問題 ${index + 1}</h3>
         <p><strong style="color: navy;">問題:</strong> ${answer.question}</p>
-        <p><strong style="color: brown;">あなたの回答:</strong> <span style="color: ${answer.isCorrect ? "green" : "red"};">${answer.selected}</span></p>
+        <p><strong style="color: brown;">あなたの回答:</strong> ${answer.selected || "未回答"}</p>
         <p><strong style="color: green;">正解:</strong> ${answer.correct}</p>
         <p><strong style="color: gray;">解説:</strong> ${answer.explanation}</p>
+        <p style="color: ${answer.isCorrect ? "green" : "red"};">
+          ${answer.isCorrect ? "正解！" : "不正解！"}
+        </p>
       </div>
     `)
     .join("");
