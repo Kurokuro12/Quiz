@@ -6,7 +6,6 @@ let currentQuestionIndex = 0;
 let playerAnswers = [];
 let selectedQuestionCount = 0;
 
-// JSONデータを取得
 async function fetchData() {
   try {
     const response = await fetch(dataUrl);
@@ -19,7 +18,6 @@ async function fetchData() {
   }
 }
 
-// カテゴリ表示
 function showCategories() {
   const categories = [...new Set(questions.map(q => q.category))];
   const categoriesDiv = document.getElementById("categories");
@@ -36,137 +34,137 @@ function showCategories() {
   document.getElementById("categoryScreen").classList.remove("hidden");
 }
 
-// カテゴリ選択後の出題数選択
 function selectCategory(category) {
   filteredQuestions = questions.filter(q => q.category === category);
+  currentQuestionIndex = 0;
+  playerAnswers = [];
+  showQuestionCountSelection();
+}
+
+function showQuestionCountSelection() {
   const questionCountDiv = document.getElementById("questionCount");
   questionCountDiv.innerHTML = "";
+  const maxQuestions = filteredQuestions.length;
 
-  [5, 10, 15].forEach(count => {
+  for (let i = 1; i <= maxQuestions; i++) {
     const button = document.createElement("button");
-    button.textContent = `${count}問`;
+    button.textContent = `${i}問`;
     button.classList.add("option-button");
-    button.onclick = () => startQuiz(count);
+    button.onclick = () => selectQuestionCount(i);
     questionCountDiv.appendChild(button);
-  });
+  }
 
   document.getElementById("categoryScreen").classList.add("hidden");
   document.getElementById("questionCountScreen").classList.remove("hidden");
 }
 
-// クイズ開始
-function startQuiz(count) {
+function selectQuestionCount(count) {
   selectedQuestionCount = count;
-  currentQuestionIndex = 0;
-  playerAnswers = [];
+  filteredQuestions = filteredQuestions.slice(0, count);
   document.getElementById("questionCountScreen").classList.add("hidden");
   document.getElementById("quizScreen").classList.remove("hidden");
   showQuestion();
 }
 
-// 問題を表示
 function showQuestion() {
-  const question = filteredQuestions[currentQuestionIndex];
-  const questionText = document.getElementById("questionText");
-  const answersDiv = document.getElementById("answers");
-  const writtenAnswerInput = document.getElementById("writtenAnswer");
-  const submitAnswerButton = document.getElementById("submitAnswerButton");
-
-  questionText.textContent = `Q${currentQuestionIndex + 1}: ${question.question}`;
-  answersDiv.innerHTML = "";
-
-  if (question.type === "choice") {
-    question.options.forEach((option) => {
-      const button = document.createElement("button");
-      button.textContent = option;
-      button.classList.add("option-button");
-      button.onclick = () => handleAnswer(option);
-      answersDiv.appendChild(button);
-    });
-    writtenAnswerInput.classList.add("hidden");
-    submitAnswerButton.classList.add("hidden");
-  } else if (question.type === "written") {
-    writtenAnswerInput.classList.remove("hidden");
-    submitAnswerButton.classList.remove("hidden");
-    submitAnswerButton.onclick = () => handleAnswer(writtenAnswerInput.value.trim());
-  }
-}
-
-// 解答処理
-function handleAnswer(answer) {
-  if (!answer) {
-    alert("回答を入力してください。");
+  if (currentQuestionIndex >= selectedQuestionCount) {
+    showResult();
     return;
   }
 
-  const currentQuestion = filteredQuestions[currentQuestionIndex];
-  playerAnswers.push({
-    question: currentQuestion.question,
-    correctAnswer: currentQuestion.correctAnswer,
-    playerAnswer: answer,
-    explanation: currentQuestion.explanation
-  });
+  const question = filteredQuestions[currentQuestionIndex];
+  const questionText = document.getElementById("questionText");
+  const answers = document.getElementById("answers");
+  const writtenAnswer = document.getElementById("writtenAnswer");
+  const submitAnswerButton = document.getElementById("submitAnswerButton");
 
-  currentQuestionIndex++;
-  if (currentQuestionIndex < selectedQuestionCount && currentQuestionIndex < filteredQuestions.length) {
-    showQuestion();
+  questionText.textContent = question.question;
+
+  if (question.options) {
+    answers.innerHTML = "";
+    writtenAnswer.classList.add("hidden");
+    submitAnswerButton.classList.add("hidden");
+    question.options.forEach((option, index) => {
+      const button = document.createElement("button");
+      button.textContent = option;
+      button.classList.add("option-button");
+      button.onclick = () => handleAnswer(index);
+      answers.appendChild(button);
+    });
   } else {
-    showResults();
+    answers.innerHTML = "";
+    writtenAnswer.classList.remove("hidden");
+    submitAnswerButton.classList.remove("hidden");
+    submitAnswerButton.onclick = () => handleAnswer(writtenAnswer.value.trim());
   }
 }
 
-// リザルト表示
-function showResults() {
-  const resultDiv = document.getElementById("result");
-  resultDiv.innerHTML = "";
+function handleAnswer(selectedAnswer) {
+  const question = filteredQuestions[currentQuestionIndex];
+  const isCorrect = question.options
+    ? selectedAnswer === question.answer
+    : selectedAnswer.toString() === question.answer.toString();
 
-  playerAnswers.forEach((answer, index) => {
-    const isCorrect = answer.correctAnswer === answer.playerAnswer;
-    const resultItem = document.createElement("div");
-    resultItem.classList.add("result-item");
-    resultItem.innerHTML = `
-      <h3>Q${index + 1}: ${answer.question}</h3>
-      <p>
-        <strong style="color: navy;">正解:</strong> 
-        <span style="color: green;">${answer.correctAnswer}</span>
-      </p>
-      <p>
-        <strong style="color: brown;">あなたの回答:</strong> 
-        <span style="color: ${isCorrect ? "green" : "red"};">${answer.playerAnswer || "未回答"}</span>
-      </p>
-      <p><strong style="color: gray;">解説:</strong> ${answer.explanation || "解説はありません。"}</p>
-      <p>${isCorrect ? "✅ 正解" : "❌ 不正解"}</p>
-    `;
-    resultDiv.appendChild(resultItem);
+  playerAnswers.push({
+    question: question.question,
+    selected: question.options ? question.options[selectedAnswer] : selectedAnswer,
+    correct: question.options ? question.options[question.answer] : question.answer,
+    explanation: question.explanation,
+    isCorrect,
   });
 
-  document.getElementById("quizScreen").classList.add("hidden");
-  document.getElementById("resultScreen").classList.remove("hidden");
+  currentQuestionIndex++;
+  showQuestion();
 }
 
+function giveUp() {
+  for (let i = currentQuestionIndex; i < filteredQuestions.length; i++) {
+    const question = filteredQuestions[i];
+    playerAnswers.push({
+      question: question.question,
+      selected: "未回答",
+      correct: question.options ? question.options[question.answer] : question.answer,
+      explanation: question.explanation,
+      isCorrect: false,
+    });
+  }
+  showResult();
+}
 
-// 最初の画面に戻る
-function restartQuiz() {
+function showResult() {
+  document.getElementById("quizScreen").classList.add("hidden");
+  const resultScreen = document.getElementById("resultScreen");
+  const resultDiv = document.getElementById("result");
+
+  resultScreen.classList.remove("hidden");
+
+  resultDiv.innerHTML = playerAnswers
+    .map((answer, index) => `
+      <div>
+        <h3>問題 ${index + 1}</h3>
+        <p><strong style="color: navy;">問題:</strong> ${answer.question}</p>
+        <p><strong style="color: brown;">あなたの回答:</strong> ${answer.selected || "未回答"}</p>
+        <p><strong style="color: green;">正解:</strong> ${answer.correct}</p>
+        <p><strong style="color: gray;">解説:</strong> ${answer.explanation}</p>
+        <p style="color: ${answer.isCorrect ? "green" : "red"};">
+          ${answer.isCorrect ? "正解！" : "不正解！"}
+        </p>
+      </div>
+    `)
+    .join("");
+}
+
+document.getElementById("startButton").onclick = fetchData;
+document.getElementById("restartButton").onclick = () => {
   document.getElementById("resultScreen").classList.add("hidden");
   document.getElementById("startScreen").classList.remove("hidden");
-}
-
-// お知らせ画面の切り替え
-function showInfo() {
+};
+document.getElementById("giveUpButton").onclick = giveUp;
+document.getElementById("infoButton").onclick = () => {
   document.getElementById("startScreen").classList.add("hidden");
   document.getElementById("infoScreen").classList.remove("hidden");
-}
-
-function backToStart() {
+};
+document.getElementById("backToStartButton").onclick = () => {
   document.getElementById("infoScreen").classList.add("hidden");
   document.getElementById("startScreen").classList.remove("hidden");
-}
-
-// イベントリスナー
-document.getElementBy
-document.getElementById("startButton").onclick = fetchData;
-document.getElementById("infoButton").onclick = showInfo;
-document.getElementById("backToStartButton").onclick = backToStart;
-document.getElementById("restartButton").onclick = restartQuiz;
-document.getElementById("giveUpButton").onclick = showResults;
-
+};
