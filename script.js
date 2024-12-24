@@ -122,22 +122,6 @@ function handleAnswer(selectedAnswer) {
   showQuestion();
 }
 
-function giveUp() {
-  for (let i = currentQuestionIndex; i < filteredQuestions.length; i++) {
-    const question = filteredQuestions[i];
-    playerAnswers.push({
-      question: question.question,
-      selected: "未回答",
-      correct: question.type === "choice"
-        ? question.options[question.answer]
-        : question.answer,
-      explanation: question.explanation,
-      isCorrect: false,
-    });
-  }
-  showResult();
-}
-
 function showResult() {
   document.getElementById("quizScreen").classList.add("hidden");
   const resultScreen = document.getElementById("resultScreen");
@@ -163,7 +147,6 @@ document.getElementById("restartButton").onclick = () => {
   document.getElementById("resultScreen").classList.add("hidden");
   document.getElementById("startScreen").classList.remove("hidden");
 };
-document.getElementById("giveUpButton").onclick = giveUp;
 document.getElementById("infoButton").onclick = () => {
   document.getElementById("startScreen").classList.add("hidden");
   document.getElementById("infoScreen").classList.remove("hidden");
